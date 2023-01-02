@@ -1,0 +1,225 @@
+# Introduction of Website:
+- Website is a collection of related web pages that may contains text, images, audio and video.
+- Any company want to devlop the website that can be devloped in two ways:
+	1. Static Website
+	2. Dynamic website
+	
+	1. Static Website: 
+		- A static website is no interaction from the end user. 
+		- To devlop static webiste we can use the mark-up languages like HTML, CSS, DHMTL, XML, JavaScript, etc.
+
+	2. Dynamic Website:
+		- A dynamic website is one in which there exist end user interaction.
+		- to devlop dynamic websites, in indusstry we have k=lot of technologies such as CGI(Comman Getway Interface), java, dot net, etc.
+		
+# What is Servlet?
+- In the initial days of server side programming there is a concept called CGI and this ways implemented in the languages called C and PERl, because of this approach CGI has the following disadvantages:
+	1. Platform dependency
+	2. Not enough security is provided.
+	3. Having lack of performance. since, for each and every request a new and separate process is creating (for example, if we make hundreds of requests, in the server side hundreds of new and separate process will be created.
+	4
+- To avoid the above problems SUN micro-system has released a technology called Servlets.
+- A servlet is a simple platform independent, architectural neutral server independent java program which extends the functionality of either web server or application server by running in the context of www.
+- Servlets is the standard specification released by SUN micro-systems and it is implemented by various server vendors such as BEA corporation (Web logic server, Apache Jakarta(Tomcat Server)).
+- In order to run any servlet one must have either application server and web server. in order to deal with servlet programming we must import the following packages:
+	1. javax.Servlet.*;
+	2. javax.servlet.http.*;
+	
+# Servlet Hierarchy:
+- In the above hierarchy chart Servlet is an Interface with contains three life cycle methods without defination.
+- GenericServlet is an abstract class which implements Servlet Interface for defining life cycle methods, i.e. life cycle methods are defined in GenericServlet with null body.
+- Using GenericServelt class we can develop protocol independent applications.
+- HttpServlet is also an abstract class which extends GenericServlet and by using this class we can develop protocol dependent applications.
+- To develop our own servlet we must choose a class that must extends either GenericServelt or HttpServlet.
+
+# Life cycle of the Servlets:
+- Servlet class is loaded.
+- Servlet instance is created.
+- init method is invoked.
+- service method is invoked.
+- destroy method is invoked.
+
+In Servlets we have three life cycle methods:
+	1. public void init();
+	2. public void service(ServletRequest req, ServletResponse res);
+	3. public void destroy();
+
+1. public void init();
+- Whenever client makes a request to a servlet, the server will receive the request and it automatically calls init() method 
+	i.e. init() method will be called only one time by the server whenever we make first request.
+- In this, method we write the block of statements which will perform one time operation, such as opening the file, database connection, initialization of parameters.
+
+2. public void service(ServletRequest req, ServletResponse res);
+- After calling init() method, service() method will be called when we make first request from second request to further subsequent request server will call only service method. 
+	therefore, service() method will be called each and every time as and when we make a request.
+- In service() method, we write the block of statements which will perform repeated operations such as retrieving data from database, retrieving data from the file, modifications of parameters data, etc.
+	Hence, in service() method we always write business logic.
+- whenever control comes to service() method the server will create two objects of ServletRequest and ServletResponce interfaces.
+	Object of ServletRequest contains the data which is passed by client. after processing client data, the resultant data must be kept in an object of ServletRespnse.
+- An object of ServletRequest and ServletResponse must be used always within the scope of service() method only 
+	i.e. we cannot use init() mehtod and destroy() method inside service() method.
+- Once the service() method is completed an object of ServletRequest and an object of ServletResponse will be destroyed.
+
+3. public void destroy();
+- The destroy() method will be called by the server in two situations, they are when the server is closed and when the servlet is remove from the servlet context.
+
+
+##Request Dispatcher:
+- The request dispatcher interface defines an object that receives the request from client and dispatches it to the resource(such as servlet, JSP, HTML file).
+- This interface has following two methods:
+	- public void forward(ServletRequest request ServletResponce responce):
+		- It is forward the request form one servlet to another resource (such as servlet, JSP, HTML file).
+	- public void include(ServletRequest request ServletResponce responce):
+		- It includes the content of the resource (such as servlet, JSP, HTML file) in the resource.
+
+# How to get the object of RequestDispatcher:
+- The getRequestDispatcher() method of ServletRequest interface returns the object of RequestDispatcher.
+	syntax -
+		public RequestDispatcher getRequestDispatcher(String resource)
+
+#sendRedirect() method:
+- The sendRedirect() method of HttpServletResponse interface can be used to reddirecet response to another resource, it may be servlet, jsp or Html file.
+	- public void sendRedirect(String URL) throws IOException
+
+##Session Management:
+- Whenever we make a request that request can be processed by group of Servlet and we get single responce(in case of Servlet chanining).
+- In general we make much number of request to many numbers of Servlets to get many numbers of response.
+	By default all these n number of request and responses are independent to each other. Since, the protocol which we are using is http.
+	http protocol is a stateless protocol. A stateless protocol is one which never maintains an identity of the client forever.
+- In order to make n number of independent request and responses as a consecutive request and response we must use the concept of session management or session tracking.
+- Session management is a process of maintaining an identity of the client for a period of time for multiple requests to get multiple response across the network.
+
+#Session management technique:
+- In order to maintain an identity of the client for a period of time, we have four types of session management techniques, they are:
+	1. Cookies
+	2. HttpSession
+	3. Hidden form field
+	4. URL rewritten
+	
+#Cookies in Servlet:
+- A cookie is the peace of information which contains an identity of the client in the form of (key, value) pair.
+- Key always represents cookie name and value represents value of the cookie.
+- A cookie is the class developed according to http protocol specification for maintaining for identity of client and it is present in a package called javax.servlet.http.* package.
+
+#Methods of cookie class:
+	- public void setMaxAge(int expiry)
+	- public String getName()
+	- public String getValue()
+	- public void setName(String name)
+	- public void setValue(String value)
+
+#Steps for developing cookie:
+1. Create an object of a cookie.
+	Cookie ck = new Cookie(String, Object);
+	for ex. 
+		Cookie c1 = new Cookie("Coder", 10);
+		Cookie c2 = new Cookie("Interface", 20);
+
+#HttpSession:
+- HttpSession is a technique of session management which maintains an identity of a client for a period of time across the network 
+	for making 'n' number of requests for obtaining 'n' number of responses. During the period of session, all the requests and responses are consecutive.
+
+#Steps for developing HttpSession Application
+- Obtain an object of javax.servlet.http.HttpSession interface.
+- In order to obtain an object of HttpSession we have to use the following two methods which are present in the HttpServletRequest.
+	- public HttpSession getSession();
+	- public HttpSession getSession(boolean);
+	for ex. HttpSession hs = req.getSession();
+			HttpSession hs = req.getSession(true);
+			When we use method II the boolean value can be either true or false.
+				Case1: Session not created and boolean value is true. Session will be created newly.
+				for ex. HttpSession hs = req.getSession(true);
+				Case2: Session not created and boolean value is false. Session will not be created at all.
+				Case3: Session already created and boolean value is true. Existing or old session will be continued with checking.
+				Case4: Session already created and boolean value is false. Existing or old session will be continued without any checking.
+				
+#Methods of HttpSession:
+- Put the values into HttpSession object by using the following methods which are present in HttpSession:
+	* public void putValue(String, Object)
+	* public void setAttributes(String, Object)
+	Here, String represents session variable name known as key and Object represents session value.
+	In HttpSession object the data is organizing in the form of key and value pair.
+	for ex.
+		hs.putValue("name", "coder");
+		hs.setAttribute("address", s2);
+		
+- Get the values from HttpSession object by using the following methods whcih are present in HttpSession:
+	* public void getValue(String, Object)
+	* public void getAttribute(String, Object)
+
+- public void setMaxInactiveInterval(long sec)
+	* In most of the popular websites an identity  of the client will be maintained for a period of 30 times. When the time interval between first request and
+	  second request i.e, if the time delay between one request to another request is 30 minutes then automatically the server will eliminate the identity of the cleint.
+	* In order to set our own session out time or maximum session active time, we use this method. In this method we specify the session active time in terms of seconds.
+	* for ex. hs.setMaxInactiveInterval(60*60);
+	
+- public boolean isNew();
+	* This method returns true when the session is created newly otherwise it returns false for old sessions.
+	
+- public void removeAttribute(String)
+	* This method is used for removing one of the session attribute name along with its value.
+	
+- public Enumeration getAttributeName()
+	* This method is used for obtaining all the session variable names.
+ 				 	
+- public void invalidate();
+	* This method is used for invalidate the identity of the client permanently i.e., all the values of session object will be removed completely.
+	
+- public long getLastAccessTime();
+	* This method is used for obtaining last access time.
+	
+- public long getId();
+	* This method is used for obtaining session id of a client which is created by servlet container.
+	
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
